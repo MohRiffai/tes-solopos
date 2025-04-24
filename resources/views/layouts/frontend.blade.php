@@ -58,41 +58,6 @@
         @yield('content')
     </div>
     <!-- End Main -->
-    <!-- footer -->
-    <hr>
-    <div class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h4>Butuh Bantuan</h4>
-                    <p class="pt-2">08:00 - 17:00 WIB / (Senin - Jumat)</p>
-                    <i class="fas fa-envelope-square me-2"> portalberita@gmail.com</i>
-                    <br>
-                    <i class="fas fa-map-marker-alt me-2"> Jl. Apel No.3, Jajar, Laweyan, Surakarta, Jawa Tengah,
-                        Indonesia
-                    </i>
-                    <br><br>
-                </div>
-                <div class="col-sm-4">
-                    <h4>Tetap Terhubung Dengan Kami</h4>
-                    <a href="#" class="text-terhubung"><i class="fab fa-facebook" style='color:blue'></i></a>
-                    <a href="#" class="text-terhubung"><i class="fab fa-instagram" style='color:#833AB4'></i></a>
-                    <a href="#" class="text-terhubung"><i class="fab fa-telegram" style='color:#0088cc'></i></a>
-                    <a href="#" class="text-terhubung"><i class="fab fa-twitter" style='color:#1DA1F2'></i></a>
-                    <a href="#" class="text-terhubung"><i class="fab fa-youtube" style='color:red'></i></a>
-                    <a href="#" class="text-terhubung"><i class="fab fa-linkedin" style='color:blue'></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="copyright">
-        <div class="container text-center">
-            Copyright &copy; <?= date('Y') ?> {{ config('app.name') }} All Reserved
-            <br>
-            PortalBerita.com
-        </div>
-    </div>
-    <!-- end footer -->
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">

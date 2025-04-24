@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -17,9 +18,14 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
+// Route halaman home
 Route::get('/', function () {
-    return view('welcome');
-});
+    $articles = \App\Models\Article::orderBy('published_at', 'desc')->paginate(5); // Gunakan paginate
+    return view('frontend.home', compact('articles'));
+})->name('home');
+
+// Route detail artikel
+Route::get('/article/{id}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('article.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

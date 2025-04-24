@@ -12,16 +12,22 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
+            // Ambil artikel yang dibuat oleh pengguna yang sedang login
         $keywords = $request->get('keywords');
         
-        // Mengambil artikel berdasarkan pencarian atau menampilkan semua artikel jika tidak ada pencarian
+        // Mengambil artikel berdasarkan pencarian atau menampilkan artikel milik pengguna yang sedang login
         if ($keywords) {
-            $articles = Article::where('title', 'like', '%' . $keywords . '%')
-                                ->orWhere('content', 'like', '%' . $keywords . '%')
+            $articles = Article::where('user_id', auth()->id())
+                                ->where(function ($query) use ($keywords) {
+                                    $query->where('title', 'like', '%' . $keywords . '%')
+                                        ->orWhere('content', 'like', '%' . $keywords . '%');
+                                })
                                 ->with('user')  // Mengambil data user yang membuat artikel
                                 ->paginate(10);
         } else {
-            $articles = Article::with('user')->paginate(10);
+            $articles = Article::where('user_id', auth()->id())
+                                ->with('user')  // Mengambil data user yang membuat artikel
+                                ->paginate(10);
         }
 
         return view('article.index', compact('articles'));
@@ -72,8 +78,14 @@ class ArticleController extends Controller
      */
     public function edit(string $id)
     {
-        $article = Article::findOrFail($id);
-        return view('article.edit', compact('article'));
+            $article = Article::findOrFail($id);
+
+        // Pastikan hanya pemilik artikel yang dapat mengedit artikel tersebut
+        if ($article->user_id !== auth()->id()) {
+            return redirect()->route('articles.index')->with('error', 'Anda tidak memiliki akses ke artikel ini.');
+    }
+
+    return view('article.edit', compact('article'));
     }
 
     /**
@@ -113,12 +125,29 @@ class ArticleController extends Controller
     return view('frontend.search', compact('home', 'keyword'));
     }
 
+    public function home()
+    {
+        $articles = Article::with('user')
+                    ->orderBy('published_at', 'desc')
+                    ->paginate(5); // Pastikan PAKAI paginate, bukan get()
+
+        return view('home', compact('articles'));
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
+        
         $article = Article::findOrFail($id);
+
+        // Pastikan hanya pemilik artikel yang dapat menghapus artikel tersebut
+        if ($article->user_id !== auth()->id()) {
+            return redirect()->route('articles.index')->with('error', 'Anda tidak memiliki akses untuk menghapus artikel ini.');
+        }
+
         $article->delete();
 
         return redirect()->route('articles.index')->with('success', 'Article deleted successfully.');
